@@ -51,7 +51,6 @@ export class UsersService {
   }
 
   // login user
-
   async loginUser(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
     const user = await this.userModal.findOne({ email: email });
@@ -74,6 +73,7 @@ export class UsersService {
     });
   }
 
+  // get user profile
   async getUserProfile(userId: string) {
     const user = await this.userModal
       .findById(userId)

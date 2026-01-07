@@ -24,10 +24,6 @@ export class TokenService {
   // save refresh token
   async saveRefreshToken(saveRefreshTokenDto: SaveRefreshTokenDto) {
     const { userId, refreshToken, expiresAt } = saveRefreshTokenDto;
-    // await this.tokenModal.create({
-    //   userId,
-    //   refreshToken,
-    //   expiresAt,
 
     await this.tokenModal.findOneAndUpdate(
       { userId }, // Find by userId

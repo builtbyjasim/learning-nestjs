@@ -5,6 +5,7 @@ import { RefreshTokensDto } from 'src/token/dtos/refresh-tokens.dto';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { LoginUserDto } from 'src/users/dtos/login-user.dto';
+import { Role } from 'src/users/enum/role.enum';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -27,7 +28,7 @@ export class AuthService {
     const payload: JwtPayload = {
       sub: user.data?.userId,
       email: user.data?.email,
-      role: user.data?.role,
+      role: user.data?.role as Role,
     };
 
     let accessToken: string;

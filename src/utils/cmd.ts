@@ -7,3 +7,7 @@
 // pnpm add -D @types/bcrypt
 
 // pnpm add class-validator class-transformer
+
+// guards
+// nest g guard common/guards/roles
+// nest g decorator common/guards/roles
