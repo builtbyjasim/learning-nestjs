@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/common/entities/jwt-payload.type';
+import { RefreshTokensDto } from 'src/token/dtos/refresh-tokens.dto';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { LoginUserDto } from 'src/users/dtos/login-user.dto';
@@ -13,14 +15,16 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
+  // register user
   async createUser(createUserDto: CreateUserDto) {
     return await this.userService.createUser(createUserDto);
   }
 
+  // login user
   async loginUser(loginUserDto: LoginUserDto) {
     const user = await this.userService.loginUser(loginUserDto);
 
-    const payload = {
+    const payload: JwtPayload = {
       sub: user.data?.userId,
       email: user.data?.email,
       role: user.data?.role,
@@ -48,5 +52,10 @@ export class AuthService {
       },
     };
     return result;
+  }
+
+  // refresh token validation
+  async refreshTokens(refreshTokensDto: RefreshTokensDto) {
+    return await this.tokenService.refreshTokens(refreshTokensDto);
   }
 }
