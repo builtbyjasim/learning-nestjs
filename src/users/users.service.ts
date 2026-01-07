@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -70,6 +71,23 @@ export class UsersService {
       success: true,
       message: 'User logged in successfully',
       data: { userId: user._id.toString(), email: user.email, role: user.role },
+    });
+  }
+
+  async getUserProfile(userId: string) {
+    const user = await this.userModal
+      .findById(userId)
+      .select('-password -__v -createdAt -updatedAt')
+      .lean();
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return apiResponse({
+      statusCode: ApiStatus.OK,
+      success: true,
+      message: 'User profile retrieved successfully',
+      data: { ...user },
     });
   }
 }
