@@ -5,7 +5,7 @@ import { RefreshTokensDto } from 'src/token/dtos/refresh-tokens.dto';
 import { TokenService } from 'src/token/token.service';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { LoginUserDto } from 'src/users/dtos/login-user.dto';
-import { Role } from 'src/users/enum/role.enum';
+import { Role } from 'src/common/enum/role.enum';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -39,9 +39,9 @@ export class AuthService {
       refreshToken = await this.jwtService.signAsync(payload, {
         expiresIn: '7d',
       });
-    } catch (error) {
+    } catch {
       throw new InternalServerErrorException({
-        error: error as string,
+        // error: error as string,
         message: 'Authentication service unavailable',
       });
     }

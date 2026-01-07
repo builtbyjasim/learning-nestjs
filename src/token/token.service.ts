@@ -46,9 +46,9 @@ export class TokenService {
 
     try {
       payload = await this.jwtService.verifyAsync<JwtPayload>(refreshToken);
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException({
-        error: error as string,
+        // error: error as string,
         message: 'Invalid refresh token',
       });
     }
@@ -60,15 +60,19 @@ export class TokenService {
     const tokenDoc = await this.tokenModal.findOne({ userId: sub });
 
     if (!tokenDoc) {
-      throw new UnauthorizedException('Refresh token not found');
+      throw new UnauthorizedException('Refresh token not found. Please login.');
     }
 
     if (tokenDoc.refreshToken !== refreshToken) {
-      throw new UnauthorizedException('Refresh token mismatch');
+      throw new UnauthorizedException(
+        'Refresh token mismatch. Please login again.',
+      );
     }
 
     if (tokenDoc.expiresAt < new Date()) {
-      throw new UnauthorizedException('Refresh token expired');
+      throw new UnauthorizedException(
+        'Refresh token expired. Please login again.',
+      );
     }
 
     const newPayload: JwtPayload = { sub, email, role };
@@ -80,9 +84,9 @@ export class TokenService {
       newRefreshToken = await this.jwtService.signAsync(newPayload, {
         expiresIn: '7d',
       });
-    } catch (error) {
+    } catch {
       throw new InternalServerErrorException({
-        error: error as string,
+        // error: error as string,
         message: 'Authentication service unavailable',
       });
     }

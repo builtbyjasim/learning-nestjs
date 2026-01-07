@@ -12,6 +12,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { apiResponse, ApiStatus } from 'src/utils/api-response';
 import { LoginUserDto } from './dtos/login-user.dto';
+import { logger } from 'src/utils';
 
 @Injectable()
 export class UsersService {
@@ -22,26 +23,35 @@ export class UsersService {
 
   // register user
   async createUser(createUserDto: CreateUserDto) {
-    const { fName, lName, email, password, role, profile } = createUserDto;
+    const { password } = createUserDto;
+    const userData = createUserDto;
+
     try {
       const hashedPwd = await bcrypt.hash(password, 10);
 
       const user = await this.userModal.create({
-        fName: fName,
-        lName: lName,
-        email: email,
+        ...userData,
         password: hashedPwd,
-        role: role,
-        profile: profile,
       });
 
       return apiResponse({
         statusCode: ApiStatus.CREATED,
         success: true,
         message: 'User created successfully',
-        data: { userId: user._id, email: user.email, role: user.role },
+        data: {
+          userId: user._id,
+          email: user.email,
+          phone: user.phone,
+          countryCode: user.countryCode,
+          role: user.role,
+          profile: user.profile,
+          status: user.status,
+          isEmailVerified: user.isEmailVerified,
+          isPhoneVerified: user.isPhoneVerified,
+        },
       });
     } catch (error: any) {
+      logger.log('Error during user creation:', error);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       if (error?.code === 11000) {
         throw new ConflictException('Email already exists');

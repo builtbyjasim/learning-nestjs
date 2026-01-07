@@ -4,7 +4,7 @@ import type { RequestWithUser } from 'src/common/entities/request-with-user.type
 import { UsersService } from './users.service';
 import { RolesGuard } from 'src/common/guards/roles/roles.guard';
 import { Roles } from 'src/common/guards/roles/roles.decorator';
-import { Role } from './enum/role.enum';
+import { Role } from '../common/enum/role.enum';
 
 @Controller('user')
 export class UsersController {
