@@ -63,6 +63,7 @@ export class UsersService {
   // login user
   async loginUser(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
+
     const user = await this.userModal.findOne({ email: email });
 
     if (!user) {
@@ -79,7 +80,17 @@ export class UsersService {
       statusCode: ApiStatus.OK,
       success: true,
       message: 'User logged in successfully',
-      data: { userId: user._id.toString(), email: user.email, role: user.role },
+      data: {
+        userId: user._id.toString(),
+        email: user.email,
+        phone: user.phone,
+        countryCode: user.countryCode,
+        role: user.role,
+        profile: user.profile,
+        status: user.status,
+        isEmailVerified: user.isEmailVerified,
+        isPhoneVerified: user.isPhoneVerified,
+      },
     });
   }
 
@@ -87,7 +98,7 @@ export class UsersService {
   async getUserProfile(userId: string) {
     const user = await this.userModal
       .findById(userId)
-      .select('-password -__v -createdAt -updatedAt')
+      .select('-password -__v -createdAt -updatedAt -deletedAt -lastLoginAt')
       .lean();
     if (!user) {
       throw new NotFoundException('User not found');

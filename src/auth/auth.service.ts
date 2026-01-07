@@ -26,7 +26,7 @@ export class AuthService {
     const user = await this.userService.loginUser(loginUserDto);
 
     const payload: JwtPayload = {
-      sub: user.data?.userId,
+      sub: user.data?.userId.toString(),
       email: user.data?.email,
       role: user.data?.role as Role,
     };
