@@ -1,0 +1,20 @@
+// {
+//   "id": "",
+//   "uuid": "",
+//   "firstName": "",
+//   "lastName": "",
+//   "email": "",
+//   "phone": "",
+//   "passwordHash": "",
+//   "status": "PENDING | ACTIVE | SUSPENDED | BLOCKED | DELETED",
+//   "role": "USER | ADMIN",
+//   "isActive": true,
+//   "isVerified": false,
+//   "emailVerifiedAt": null,
+//   "failedLoginAttempts": 0,
+//   "lastLoginAt": null,
+//   "provider": "local",
+//   "createdAt": "",
+//   "updatedAt": "",
+//   "deletedAt": null
+// }

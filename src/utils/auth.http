@@ -1,0 +1,14 @@
+
+
+### Register User
+POST http://localhost:3786/auth/register
+Content-Type: application/json
+
+{
+  "fName": "Jasim",
+  "lName": "Khan",
+  "email": "jasim@example.com",
+  "password": "Password@123",
+  "role": "customer",
+  "profile": ""
+}
