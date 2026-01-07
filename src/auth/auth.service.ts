@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/common/entities/jwt-payload.type';
 import { RefreshTokensDto } from 'src/token/dtos/refresh-tokens.dto';
@@ -30,10 +30,20 @@ export class AuthService {
       role: user.data?.role,
     };
 
-    const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '7d',
-    });
+    let accessToken: string;
+    let refreshToken: string;
+
+    try {
+      accessToken = await this.jwtService.signAsync(payload);
+      refreshToken = await this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+      });
+    } catch (error) {
+      throw new InternalServerErrorException({
+        error: error as string,
+        message: 'Authentication service unavailable',
+      });
+    }
 
     if (user.data?.userId && typeof user.data?.userId === 'string') {
       await this.tokenService.saveRefreshToken({

@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, cache: true, envFilePath: '.env' }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -18,10 +18,10 @@ import { JwtModule } from '@nestjs/jwt';
       }),
     }),
     JwtModule.registerAsync({
+      global: true,
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        global: true,
-        secret: config.get('JWT_SECRET'),
+        secret: config.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '2m' },
       }),
     }),
